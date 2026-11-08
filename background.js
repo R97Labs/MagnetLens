@@ -35,7 +35,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 
   // Handle GitHub Update Check
- if (request.action === "checkUpdate") {
+  if (request.action === "checkUpdate") {
     fetch(`${MANIFEST_URL}?t=${Date.now()}`, { cache: "no-store" })
       .then(res => {
         if (!res.ok) throw new Error("GitHub fetch failed");
@@ -44,25 +44,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       .then(remoteManifest => {
         const localVersion = chrome.runtime.getManifest().version;
         
-        // Split versions into arrays (e.g., "1.2" -> [1, 2])
-        const v1 = remoteManifest.version.split('.').map(Number);
-        const v2 = localVersion.split('.').map(Number);
-        
-        let updateAvailable = false;
-        
-        // Mathematically compare each segment of the version number
-        for (let i = 0; i < Math.max(v1.length, v2.length); i++) {
-          const num1 = v1[i] || 0;
-          const num2 = v2[i] || 0;
-          if (num1 > num2) {
-            updateAvailable = true;
-            break;
-          } else if (num1 < num2) {
-            break;
-          }
-        }
-
-        if (updateAvailable) {
+        // SIMPLE CHECK: If the GitHub version text is different from the local text, show the banner
+        if (remoteManifest.version !== localVersion) {
           sendResponse({ updateAvailable: true, version: remoteManifest.version, url: RELEASES_URL });
         } else {
           sendResponse({ updateAvailable: false });

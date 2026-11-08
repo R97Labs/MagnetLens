@@ -8,14 +8,12 @@ function createOverlay(initialQuery) {
   const existing = document.getElementById("streamlink-overlay");
   if (existing) existing.remove();
 
-
-  
   const overlay = document.createElement("div");
   overlay.id = "streamlink-overlay";
   Object.assign(overlay.style, {
     position: "fixed", top: "0", left: "0", width: "100vw", height: "100vh",
     backgroundColor: "rgba(10, 12, 16, 0.7)", 
-    backdropFilter: "blur(12px)", // Premium Glassmorphism blur
+    backdropFilter: "blur(12px)", 
     WebkitBackdropFilter: "blur(12px)",
     zIndex: "999999", display: "flex", justifyContent: "center", alignItems: "center"
   });
@@ -36,15 +34,12 @@ function createOverlay(initialQuery) {
     if (e.target === overlay) overlay.remove();
   });
 
-modal.innerHTML = `
+  modal.innerHTML = `
     <div id="sl-update-banner" style="display: none; background: rgba(46, 160, 67, 0.15); border: 1px solid rgba(46, 160, 67, 0.4); color: #3fb950; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; font-size: 14px; font-weight: 600; justify-content: space-between; align-items: center;">
       <span>🚀 MagnetLens Update Available (<span id="sl-update-version"></span>)</span>
       <a id="sl-update-link" href="#" target="_blank" style="background: #238636; color: white; padding: 6px 14px; border-radius: 8px; text-decoration: none; transition: background 0.2s;">Download Latest</a>
     </div>
     <div style="display: flex; gap: 12px; margin-bottom: 20px;">
-      <input id="sl-search-input" value="${initialQuery}" style="flex: 1; padding: 14px 16px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 12px; font-size: 16px; outline: none; transition: border-color 0.2s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);" placeholder="Search torrents...">
-      <button id="sl-search-btn" style="padding: 14px 28px; background: linear-gradient(135deg, #238636, #2ea043); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 15px; box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3); transition: transform 0.1s, box-shadow 0.2s;">Search</button>
-    </div>
       <input id="sl-search-input" value="${initialQuery}" style="flex: 1; padding: 14px 16px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 12px; font-size: 16px; outline: none; transition: border-color 0.2s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);" placeholder="Search torrents...">
       <button id="sl-search-btn" style="padding: 14px 28px; background: linear-gradient(135deg, #238636, #2ea043); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 15px; box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3); transition: transform 0.1s, box-shadow 0.2s;">Search</button>
     </div>
@@ -59,24 +54,22 @@ modal.innerHTML = `
     <div id="sl-results"></div>
   `;
 
-  // Premium Floating Preview Box (Centered image handling)
   const previewBox = document.createElement("div");
   previewBox.id = "sl-preview-box";
   Object.assign(previewBox.style, {
-    position: "fixed", right: "30px", top: "30px", width: "360px", height: "202px", // 16:9 Aspect Ratio
+    position: "fixed", right: "30px", top: "30px", width: "360px", height: "202px",
     backgroundColor: "rgba(10, 12, 16, 0.9)", border: "1px solid rgba(255,255,255,0.1)", 
     borderRadius: "12px", opacity: "0", transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)", 
     boxShadow: "0 20px 40px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05) inset",
     pointerEvents: "none", display: "flex", alignItems: "center", justifyContent: "center",
     overflow: "hidden", zIndex: "1000000", backdropFilter: "blur(10px)",
-    transform: "translateY(10px)" // Slight animation offset
+    transform: "translateY(10px)"
   });
   
   overlay.appendChild(modal);
   overlay.appendChild(previewBox);
   document.body.appendChild(overlay);
 
-  // Tab switching logic (updated for modern underline active state)
   let currentSort = 'seeders';
 
   document.getElementById("sl-search-btn").addEventListener("click", () => {
@@ -89,7 +82,7 @@ modal.innerHTML = `
       Array.from(document.getElementById("sl-sort-tabs").children).forEach(btn => {
         btn.style.color = "#8b949e";
         btn.style.fontWeight = "500";
-        btn.innerHTML = btn.textContent; // Strip underline
+        btn.innerHTML = btn.textContent;
       });
       e.target.style.color = "#e6edf3";
       e.target.style.fontWeight = "600";
@@ -99,17 +92,17 @@ modal.innerHTML = `
   });
 
   fetchData(initialQuery, currentSort);
+
   // Trigger update check when the overlay opens
   chrome.runtime.sendMessage({ action: "checkUpdate" }, (response) => {
     if (response && response.updateAvailable) {
       document.getElementById("sl-update-version").textContent = response.version;
       document.getElementById("sl-update-link").href = response.url;
-      document.getElementById("sl-update-banner").style.display = "flex"; // Un-hides the banner
+      document.getElementById("sl-update-banner").style.display = "flex";
     }
   });
 }
 
-// Premium Color Palette for Sizes
 function getSizeColor(sizeStr) {
   let size = parseFloat(sizeStr);
   if (isNaN(size)) return { bg: "rgba(31, 58, 95, 0.2)", border: "rgba(31, 58, 95, 0.5)", text: "#79c0ff" }; 
@@ -119,7 +112,6 @@ function getSizeColor(sizeStr) {
   else if (str.includes("gb")) size *= 1024;
   else if (str.includes("kb")) size /= 1024;
   
-  // Translucent background, solid border, bright text
   if (size < 500) return { bg: "rgba(46, 160, 67, 0.15)", border: "rgba(46, 160, 67, 0.4)", text: "#3fb950" }; 
   if (size < 2048) return { bg: "rgba(210, 153, 34, 0.15)", border: "rgba(210, 153, 34, 0.4)", text: "#d29922" }; 
   if (size < 10240) return { bg: "rgba(227, 98, 9, 0.15)", border: "rgba(227, 98, 9, 0.4)", text: "#e36209" }; 
@@ -129,7 +121,6 @@ function getSizeColor(sizeStr) {
 function fetchData(query, sort) {
   const resultsDiv = document.getElementById("sl-results");
   
-  // Modern pulsating loading state
   resultsDiv.innerHTML = `
     <div style="display: flex; gap: 16px; align-items: center; padding: 20px; color: #8b949e;">
        <div style="width: 20px; height: 20px; border: 2px solid rgba(88, 166, 255, 0.2); border-top: 2px solid #58a6ff; border-radius: 50%; animation: sl-spin 0.8s linear infinite;"></div>
@@ -156,10 +147,7 @@ function fetchData(query, sort) {
         const pubDate = item.querySelector("pubDate")?.textContent || "";
         const description = item.querySelector("description")?.textContent || "";
         
-        // Clean title
         const cleanTitle = rawTitle.replace(/(\.mkv|\.mp4|\.avi|\[YTS\.MX\]|\[TGx\]|\[rartv\])/gi, '').replace(/\./g, ' ').trim();
-        
-        // Extract size
         const sizeMatch = description.match(/([0-9.]+\s*[MGT]B)/i);
         const size = sizeMatch ? sizeMatch[1] : "Unknown";
         
@@ -176,7 +164,6 @@ function fetchData(query, sort) {
           transition: "background 0.2s, border-color 0.2s"
         });
         
-        // Subtle hover highlight for the entire row
         itemDiv.addEventListener("mouseenter", () => { itemDiv.style.background = "rgba(255, 255, 255, 0.04)"; itemDiv.style.borderColor = "rgba(255, 255, 255, 0.1)"; });
         itemDiv.addEventListener("mouseleave", () => { itemDiv.style.background = "rgba(255, 255, 255, 0.02)"; itemDiv.style.borderColor = "rgba(255, 255, 255, 0.05)"; });
         
@@ -198,7 +185,7 @@ function fetchData(query, sort) {
           
           clearInterval(window.slSlideshow);
           previewBox.style.opacity = "1";
-          previewBox.style.transform = "translateY(0)"; // Float up animation
+          previewBox.style.transform = "translateY(0)"; 
           
           previewBox.innerHTML = `
             <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
@@ -222,8 +209,8 @@ function fetchData(query, sort) {
                   const imgEl = document.createElement("img");
                   Object.assign(imgEl.style, {
                     width: "100%", height: "100%", 
-                    objectFit: "contain", // Prevents zooming/cropping
-                    objectPosition: "center", // Centers the image
+                    objectFit: "contain", 
+                    objectPosition: "center", 
                     borderRadius: "10px"
                   });
                   
@@ -265,7 +252,6 @@ function fetchData(query, sort) {
           display: "flex", gap: "12px", fontSize: "12px", alignItems: "center", flexWrap: "wrap"
         });
         
-        // Modern Pill Design (Seeders removed)
         metaDiv.innerHTML = `
           <button class="sl-play-btn" style="background: rgba(88, 166, 255, 0.1); border: 1px solid rgba(88, 166, 255, 0.4); color: #58a6ff; padding: 6px 14px; border-radius: 8px; cursor: pointer; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s;">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg> Play

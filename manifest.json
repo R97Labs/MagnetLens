@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "MagnetLens",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Right-click text to search torrents.",
   "permissions": [
     "contextMenus",

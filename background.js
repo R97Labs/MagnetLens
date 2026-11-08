@@ -33,7 +33,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 // --- CUSTOM GITHUB UPDATE CHECKER ---
 const GITHUB_USER = "R97Labs";
-const GITHUB_REPO = "YOUR_REPO_NAME";
+const GITHUB_REPO = "MagnetLens";
 const MANIFEST_URL = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/main/manifest.json`;
 const RELEASES_URL = `https://github.com/${GITHUB_USER}/${GITHUB_REPO}/releases/latest`;
 

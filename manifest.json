@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "MagnetLens",
+  "version": "1.0",
+  "description": "Right-click text to search torrents.",
+  "permissions": [
+    "contextMenus",
+    "notifications"
+  ],
+  "host_permissions": [
+    "*://whatslink.info/*",
+    "*://live-torrent-proxy.vercel.app/*",
+    "*://raw.githubusercontent.com/*"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
+  ]
+}

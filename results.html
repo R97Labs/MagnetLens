@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+      background-color: #121212; 
+      color: #e0e0e0; 
+      padding: 15px; 
+      margin: 0;
+    }
+    h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+    .item { background: #1e1e1e; padding: 12px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #2a2a2a; }
+    .title { font-weight: 600; margin-bottom: 8px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+    a { color: #58a6ff; text-decoration: none; font-size: 13px; font-family: monospace; }
+    a:hover { text-decoration: underline; }
+    #loading { font-style: italic; color: #888; }
+  </style>
+</head>
+<body>
+  <h2>Results for: <span id="search-term"></span></h2>
+  <div id="results"><div id="loading">Fetching from Vercel edge...</div></div>
+  <script src="results.js"></script>
+</body>
+</html>

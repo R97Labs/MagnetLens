@@ -8,6 +8,15 @@ function createOverlay(initialQuery) {
   const existing = document.getElementById("streamlink-overlay");
   if (existing) existing.remove();
 
+  // Trigger update check when the overlay opens
+  chrome.runtime.sendMessage({ action: "checkUpdate" }, (response) => {
+    if (response && response.updateAvailable) {
+      document.getElementById("sl-update-version").textContent = response.version;
+      document.getElementById("sl-update-link").href = response.url;
+      document.getElementById("sl-update-banner").style.display = "flex"; // Un-hides the banner
+    }
+  });
+  
   const overlay = document.createElement("div");
   overlay.id = "streamlink-overlay";
   Object.assign(overlay.style, {

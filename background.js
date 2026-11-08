@@ -16,6 +16,11 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     chrome.tabs.sendMessage(tab.id, {
       action: "openOverlay",
       query: info.selectionText
+    }, (response) => {
+      // Catch and silently ignore the "Receiving end does not exist" error
+      if (chrome.runtime.lastError) {
+        console.warn("MagnetLens: Please refresh this webpage to use the search overlay.");
+      }
     });
   }
 });

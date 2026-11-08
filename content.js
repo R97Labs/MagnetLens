@@ -34,8 +34,15 @@ function createOverlay(initialQuery) {
     if (e.target === overlay) overlay.remove();
   });
 
-  modal.innerHTML = `
+modal.innerHTML = `
+    <div id="sl-update-banner" style="display: none; background: rgba(46, 160, 67, 0.15); border: 1px solid rgba(46, 160, 67, 0.4); color: #3fb950; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px; font-size: 14px; font-weight: 600; justify-content: space-between; align-items: center;">
+      <span>🚀 MagnetLens Update Available (<span id="sl-update-version"></span>)</span>
+      <a id="sl-update-link" href="#" target="_blank" style="background: #238636; color: white; padding: 6px 14px; border-radius: 8px; text-decoration: none; transition: background 0.2s;">Download Latest</a>
+    </div>
     <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+      <input id="sl-search-input" value="${initialQuery}" style="flex: 1; padding: 14px 16px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 12px; font-size: 16px; outline: none; transition: border-color 0.2s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);" placeholder="Search torrents...">
+      <button id="sl-search-btn" style="padding: 14px 28px; background: linear-gradient(135deg, #238636, #2ea043); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 15px; box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3); transition: transform 0.1s, box-shadow 0.2s;">Search</button>
+    </div>
       <input id="sl-search-input" value="${initialQuery}" style="flex: 1; padding: 14px 16px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 12px; font-size: 16px; outline: none; transition: border-color 0.2s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);" placeholder="Search torrents...">
       <button id="sl-search-btn" style="padding: 14px 28px; background: linear-gradient(135deg, #238636, #2ea043); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; font-size: 15px; box-shadow: 0 4px 12px rgba(35, 134, 54, 0.3); transition: transform 0.1s, box-shadow 0.2s;">Search</button>
     </div>
